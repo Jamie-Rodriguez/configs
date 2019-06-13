@@ -10,7 +10,7 @@ syntax on
 "     OSX/Windows: SF\ Mono\ Medium:h12
 "     Linux:       SF\ Mono\ Medium\ 12
 " See :help guifont inside gVim for more details
-set guifont=SF\ Mono\ Medium\ 12"
+set guifont=SF\ Mono\ Medium\ 12
 
 " Display linenumbers
 set number
