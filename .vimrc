@@ -1,6 +1,9 @@
 " Colourscheme
 color slate
 
+" Turn syntax highlighting on
+syntax on
+
 " (gVim) Font
 " Note: Different operating systems have different syntax for specifying fonts
 " e.g.
