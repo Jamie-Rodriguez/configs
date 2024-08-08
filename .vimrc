@@ -4,6 +4,9 @@ syntax on
 " Display 'hybrid' linenumbers
 set number relativenumber
 
+" Incrementally search while typing
+set incsearch
+
 " Highlight the search results
 set hlsearch
 
@@ -63,6 +66,12 @@ augroup END
 
 " -------------------------------- Keybindings ---------------------------------
 
+" fzf
+" Find file
+nnoremap <C-p> :Files<CR>
+" Search across entire project for string
+nnoremap <leader>f :Rg<space>
+
 " LSP keybindings
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
@@ -75,11 +84,9 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> gi <plug>(lsp-implementation)
     nmap <buffer> gt <plug>(lsp-type-definition)
     nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
     nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
     nmap <buffer> K <plug>(lsp-hover)
-    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
