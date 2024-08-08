@@ -8,6 +8,9 @@ vim.opt.relativenumber = true
 -- Highlight the search results
 vim.opt.hlsearch = true
 
+-- Incrementally search while typing
+vim.opt.incsearch = true
+
 -- Set so that we don't have to save current buffer before switching to another buffer
 vim.opt.hidden = true
 
@@ -25,6 +28,9 @@ vim.opt.wildmode = 'list:longest,list:full'
 local Plug = vim.fn['plug#']
 
 vim.call('plug#begin', vim.fn.has('nvim') and vim.fn.stdpath('data') .. '/plugged' or '~/.vim/plugged')
+
+-- Git
+Plug 'tpope/vim-fugitive'
 
 -- fzf
 Plug('junegunn/fzf', {
