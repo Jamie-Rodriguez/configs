@@ -80,16 +80,31 @@ function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+
+    " Go to definition of symbol under cursor
     nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    " Find references of symbol under cursor
     nmap <buffer> gr <plug>(lsp-references)
+    " Go to implementation of symbol under cursor
     nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    " Show hover information of symbol under cursor
     nmap <buffer> K <plug>(lsp-hover)
+    " Show signature help (parameter information) for current function call
+    nmap <buffer> <C-k> <plug>(lsp-signature-help)
+    " Rename symbol under cursor
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    " Show available code actions
+    nmap <buffer> <leader>ca <plug>(lsp-code-action)
+    " Show diagnostic (error, warning, etc.) in a floating window
+    nmap <buffer> <space>e <plug>(lsp-diagnostic-open-float)
+    " Go to next diagnostic
+    nmap <buffer> ]d <plug>(lsp-next-diagnostic)
+    " Go to previous diagnostic
+    nmap <buffer> [d <plug>(lsp-previous-diagnostic)
+    " Show document symbol list
+    nmap <buffer> <space>o <plug>(lsp-document-symbol-search)
+    " Show workspace symbol list
+    nmap <buffer> <space>ws <plug>(lsp-workspace-symbol-search)
 
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')

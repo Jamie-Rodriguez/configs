@@ -147,13 +147,13 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
 
     -- Rename symbol under cursor
-    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
 
     -- Show available code actions
-    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 
     -- Show diagnostic (error, warning, etc.) in a floating window
-    -- vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 
     -- Go to next diagnostic
     vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
