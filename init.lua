@@ -14,6 +14,12 @@ vim.opt.incsearch = true
 -- Set so that we don't have to save current buffer before switching to another buffer
 vim.opt.hidden = true
 
+-- Clear the jumplist each time you start NeoVim
+vim.api.nvim_create_autocmd("UIEnter", {
+    pattern = "*",
+    command = "clearjumps"
+})
+
 -- Display current line and column in the bottom-right
 vim.opt.ruler = true
 

@@ -13,6 +13,9 @@ set hlsearch
 " Set so that we don't have to save current buffer before switching to another buffer
 set hidden
 
+" Clear the jumplist each time you start Vim
+autocmd VimEnter * :clearjumps
+
 " Display current line and column in the bottom-right
 set ruler
 
