@@ -5,11 +5,20 @@ vim.cmd('syntax on')
 vim.opt.number = true
 vim.opt.relativenumber = true
 
+-- Display current line and column in the bottom-right
+vim.opt.ruler = true
+
+-- Use 'light' themes on colourschemes when available
+-- vim.opt.background = 'light'
+
 -- Highlight the search results
 vim.opt.hlsearch = true
 
 -- Incrementally search while typing
 vim.opt.incsearch = true
+
+-- Make autocomplete work like Bash
+vim.opt.wildmode = 'list:longest,list:full'
 
 -- Set so that we don't have to save current buffer before switching to another buffer
 vim.opt.hidden = true
@@ -19,15 +28,6 @@ vim.api.nvim_create_autocmd("UIEnter", {
     pattern = "*",
     command = "clearjumps"
 })
-
--- Display current line and column in the bottom-right
-vim.opt.ruler = true
-
--- Use 'light' themes on colourschemes when available
--- vim.opt.background = 'light'
-
--- Make autocomplete work like Bash
-vim.opt.wildmode = 'list:longest,list:full'
 
 ----------------------------------- Plugins ------------------------------------
 

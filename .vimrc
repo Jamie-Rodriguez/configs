@@ -4,23 +4,23 @@ syntax on
 " Display 'hybrid' linenumbers
 set number relativenumber
 
-" Incrementally search while typing
-set incsearch
+" Display current line and column in the bottom-right
+set ruler
+
+" Use 'light' themes on colourschemes when available
+"set background=light
 
 " Highlight the search results
 set hlsearch
+
+" Incrementally search while typing
+set incsearch
 
 " Set so that we don't have to save current buffer before switching to another buffer
 set hidden
 
 " Clear the jumplist each time you start Vim
 autocmd VimEnter * :clearjumps
-
-" Display current line and column in the bottom-right
-set ruler
-
-" Use 'light' themes on colourschemes when available
-" set background=light
 
 " ---------------------------------- Plugins -----------------------------------
 
