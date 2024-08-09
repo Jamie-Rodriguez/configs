@@ -37,6 +37,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
 
+" Make marks visible in 'sign column'
+Plug 'kshenoy/vim-signature'
+
 " Colourschemes
 Plug 'habamax/vim-habaurora'
 Plug 'NLKNguyen/papercolor-theme'

@@ -55,6 +55,9 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 
+-- Make marks visible in 'sign column'
+Plug 'kshenoy/vim-signature'
+
 -- Colourschemes
 Plug 'habamax/vim-habaurora'
 Plug 'NLKNguyen/papercolor-theme'
