@@ -73,6 +73,18 @@ augroup lsp_install
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
+if executable('clojure-lsp')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'clojure-lsp',
+        \ 'cmd': {server_info->['clojure-lsp']},
+        \ 'allowlist': ['clojure', 'clojurescript'],
+        \ 'root_uri': {server_info->lsp#utils#path_to_uri(
+        \     lsp#utils#find_nearest_parent_directory(
+        \         lsp#utils#get_buffer_path(),
+        \         ['.clj-kondo', 'project.clj', 'deps.edn', 'build.boot', 'shadow-cljs.edn']))},
+        \ })
+endif
+
 " -------------------------------- Keybindings ---------------------------------
 
 " fzf

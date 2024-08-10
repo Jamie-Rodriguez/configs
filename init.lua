@@ -216,6 +216,20 @@ nvim_lsp.tsserver.setup {
     )
 }
 
+-- clojure-lsp
+nvim_lsp.clojure_lsp.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "clojure", "clojurescript", "edn" },
+    root_dir = nvim_lsp.util.root_pattern(
+        "project.clj",
+        "deps.edn",
+        "build.boot",
+        "shadow-cljs.edn",
+        ".git"
+    )
+}
+
 ---------------------------- Plugins Custom Configs ----------------------------
 
 require('telescope').setup {
