@@ -73,6 +73,26 @@ augroup lsp_install
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
+if executable('typescript-language-server')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'tsserver',
+        \ 'cmd': {server_info->['typescript-language-server', '--stdio']},
+        \ 'root_uri':{server_info->lsp#utils#path_to_uri(
+        \     lsp#utils#find_nearest_parent_file_directory(
+        \         lsp#utils#get_buffer_path(),
+        \         ['package.json',
+        \          'tsconfig.json',
+        \          'jsconfig.json',
+        \          '.git']))},
+        \ 'whitelist': ['javascript',
+        \               'javascriptreact',
+        \               'javascript.jsx',
+        \               'typescript',
+        \               'typescriptreact',
+        \               'typescript.tsx'],
+        \ })
+endif
+
 if executable('clojure-lsp')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'clojure-lsp',
@@ -81,7 +101,12 @@ if executable('clojure-lsp')
         \ 'root_uri': {server_info->lsp#utils#path_to_uri(
         \     lsp#utils#find_nearest_parent_directory(
         \         lsp#utils#get_buffer_path(),
-        \         ['.clj-kondo', 'project.clj', 'deps.edn', 'build.boot', 'shadow-cljs.edn']))},
+        \         ['.clj-kondo',
+        \          'project.clj',
+        \          'deps.edn',
+        \          'build.boot',
+        \          'shadow-cljs.edn']
+        \     ))},
         \ })
 endif
 
