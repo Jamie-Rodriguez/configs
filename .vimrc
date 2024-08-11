@@ -126,10 +126,14 @@ function! s:on_lsp_buffer_enabled() abort
 
     " Go to definition of symbol under cursor
     nmap <buffer> gd <plug>(lsp-definition)
-    " Find references of symbol under cursor
-    nmap <buffer> gr <plug>(lsp-references)
     " Go to implementation of symbol under cursor
     nmap <buffer> gi <plug>(lsp-implementation)
+    " Find references of symbol under cursor
+    nmap <buffer> gr <plug>(lsp-references)
+    " Show the places where the current function is being called
+    nmap <buffer> <leader>ci <plug>(lsp-call-hierarchy-incoming)
+    " Show functions that are called within the body of the current function
+    nmap <buffer> <leader>co <plug>(lsp-call-hierarchy-outgoing)
     " Show hover information of symbol under cursor
     nmap <buffer> K <plug>(lsp-hover)
     " Show signature help (parameter information) for current function call

@@ -143,11 +143,17 @@ local on_attach = function(client, bufnr)
     -- Go to definition of symbol under cursor
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
 
+    -- Go to implementation of symbol under cursor
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+
     -- Find references of symbol under cursor
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
 
-    -- Go to implementation of symbol under cursor
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    -- Show the places where the current function is being called
+    vim.keymap.set('n', '<leader>ci', vim.lsp.buf.incoming_calls, opts)
+
+    -- Show functions that are called within the body of the current function
+    vim.keymap.set('n', '<leader>co', vim.lsp.buf.outgoing_calls, opts)
 
     -- Show hover information of symbol under cursor
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
