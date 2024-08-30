@@ -9,7 +9,7 @@ vim.opt.relativenumber = true
 vim.opt.ruler = true
 
 -- Use 'light' themes on colourschemes when available
--- vim.opt.background = 'light'
+vim.opt.background = 'dark'
 
 -- Highlight the search results
 vim.opt.hlsearch = true
@@ -276,4 +276,4 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
 
 -- Set colorscheme
-vim.cmd('colorscheme sonokai')
+vim.cmd('colorscheme everforest')
