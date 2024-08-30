@@ -8,7 +8,7 @@ set number relativenumber
 set ruler
 
 " Use 'light' themes on colourschemes when available
-"set background=light
+set background=light
 
 " Highlight the search results
 set hlsearch
@@ -63,7 +63,7 @@ Plug 'elixir-editors/vim-elixir'
 call plug#end()
 
 " Set colorscheme now that plugins are loaded
-colorscheme sonokai
+colorscheme PaperColor
 
 " ------------------------------------ LSP -------------------------------------
 
