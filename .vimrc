@@ -44,10 +44,10 @@ Plug 'mattn/vim-lsp-settings'
 Plug 'kshenoy/vim-signature'
 
 " Colourschemes
-Plug 'habamax/vim-habaurora'
 Plug 'NLKNguyen/papercolor-theme'
-"Plug 'sainnhe/everforest'
-"Plug 'nordtheme/vim'
+Plug 'sonph/onehalf'
+Plug 'sainnhe/everforest'
+Plug 'sainnhe/gruvbox-material'
 Plug 'sainnhe/sonokai'
 
 " Syntax support

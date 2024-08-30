@@ -65,8 +65,10 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'kshenoy/vim-signature'
 
 -- Colourschemes
-Plug 'habamax/vim-habaurora'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'sonph/onehalf'
+Plug 'sainnhe/everforest'
+Plug 'sainnhe/gruvbox-material'
 Plug 'sainnhe/sonokai'
 
 -- Syntax support
