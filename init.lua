@@ -66,7 +66,7 @@ Plug 'kshenoy/vim-signature'
 
 -- Colourschemes
 Plug 'NLKNguyen/papercolor-theme'
-Plug 'sonph/onehalf'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
 Plug 'sainnhe/everforest'
 Plug 'sainnhe/gruvbox-material'
 Plug 'sainnhe/sonokai'
