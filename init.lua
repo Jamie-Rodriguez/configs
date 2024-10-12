@@ -238,6 +238,32 @@ nvim_lsp.clojure_lsp.setup {
     )
 }
 
+-- python-lsp-server
+nvim_lsp.pylsp.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "python" },
+    root_dir = nvim_lsp.util.root_pattern(
+        "pyproject.toml",
+        "setup.py",
+        "setup.cfg",
+        "requirements.txt",
+        "Pipfile",
+        ".git"
+    ),
+    settings = {
+        pylsp = {
+            plugins = {
+                pycodestyle = { enabled = false },
+                mccabe = { enabled = false },
+                pyflakes = { enabled = false },
+                flake8 = { enabled = true }
+            },
+            configurationSources = {'flake8'}
+        }
+    }
+}
+
 ---------------------------- Plugins Custom Configs ----------------------------
 
 require('telescope').setup {

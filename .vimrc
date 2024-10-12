@@ -110,6 +110,25 @@ if executable('clojure-lsp')
         \ })
 endif
 
+if executable('pylsp')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pylsp',
+        \ 'cmd': {server_info->['pylsp']},
+        \ 'allowlist': ['python'],
+        \ 'config': {
+        \   'pylsp': {
+        \     'plugins': {
+        \       'pycodestyle': {'enabled': v:false},
+        \       'mccabe': {'enabled': v:false},
+        \       'pyflakes': {'enabled': v:false},
+        \       'flake8': {'enabled': v:true}
+        \     },
+        \     'configurationSources': ['flake8']
+        \   }
+        \ }
+        \ })
+endif
+
 " -------------------------------- Keybindings ---------------------------------
 
 " fzf
