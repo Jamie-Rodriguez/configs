@@ -269,15 +269,9 @@ nvim_lsp.pylsp.setup {
 require('telescope').setup {
     defaults = {
         layout_strategy = 'vertical',
-        layout_config = {
-            vertical = {
-                preview_cutoff = 0
-            }
-        },
         preview = {
             treesitter = true,
             wrap_lines = true,
-            context_lines = 2,
         },
         path_display = { 'smart', shorten = { len = 3 } },
         dynamic_preview_title = true,
