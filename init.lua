@@ -38,6 +38,9 @@ vim.call('plug#begin', vim.fn.has('nvim') and vim.fn.stdpath('data') .. '/plugge
 -- Git
 Plug 'tpope/vim-fugitive'
 
+-- Make marks visible in 'sign column'
+Plug 'kshenoy/vim-signature'
+
 -- fzf
 Plug('junegunn/fzf', {
     ['do'] = function()
@@ -53,24 +56,6 @@ Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate' })
 Plug 'nvim-lua/plenary.nvim'
 Plug('nvim-telescope/telescope.nvim', { tag = '0.1.8' })
 
--- LSPs
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/nvim-cmp'
-
--- Make marks visible in 'sign column'
-Plug 'kshenoy/vim-signature'
-
--- Colourschemes
-Plug 'NLKNguyen/papercolor-theme'
-Plug('sonph/onehalf', { rtp = 'vim' })
-Plug 'sainnhe/everforest'
-Plug 'sainnhe/gruvbox-material'
-Plug 'sainnhe/sonokai'
-
 -- Syntax support
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'NLKNguyen/c-syntax.vim'
@@ -79,6 +64,21 @@ Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'preservim/vim-markdown'
 Plug 'vim-python/python-syntax'
 Plug 'elixir-editors/vim-elixir'
+
+-- Colourschemes
+Plug 'NLKNguyen/papercolor-theme'
+Plug('sonph/onehalf', { rtp = 'vim' })
+Plug 'sainnhe/everforest'
+Plug 'sainnhe/gruvbox-material'
+Plug 'sainnhe/sonokai'
+
+-- LSPs
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
 
 vim.call('plug#end')
 

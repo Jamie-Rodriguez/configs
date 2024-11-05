@@ -32,23 +32,12 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 " Git
 Plug 'tpope/vim-fugitive'
 
-" fzf
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-
-" LSP
-Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
-
 " Make marks visible in 'sign column'
 Plug 'kshenoy/vim-signature'
 
-" Colourschemes
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'sonph/onehalf', { 'rtp': 'vim' }
-Plug 'sainnhe/everforest'
-Plug 'sainnhe/gruvbox-material'
-Plug 'sainnhe/sonokai'
+" fzf
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 " Syntax support
 Plug 'kien/rainbow_parentheses.vim'
@@ -58,6 +47,17 @@ Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'preservim/vim-markdown'
 Plug 'vim-python/python-syntax'
 Plug 'elixir-editors/vim-elixir'
+
+" Colourschemes
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'sainnhe/everforest'
+Plug 'sainnhe/gruvbox-material'
+Plug 'sainnhe/sonokai'
+
+" LSP
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
