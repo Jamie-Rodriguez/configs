@@ -7,6 +7,8 @@ set number relativenumber
 " Display current line and column in the bottom-right
 set ruler
 
+" Disable code-folding
+set nofoldenable
 
 " Highlight the search results
 set hlsearch

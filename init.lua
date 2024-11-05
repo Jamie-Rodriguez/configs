@@ -8,6 +8,8 @@ vim.opt.relativenumber = true
 -- Display current line and column in the bottom-right
 vim.opt.ruler = true
 
+-- Disable code-folding
+vim.opt.foldenable = false
 
 -- Highlight the search results
 vim.opt.hlsearch = true
