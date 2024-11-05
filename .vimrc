@@ -7,8 +7,6 @@ set number relativenumber
 " Display current line and column in the bottom-right
 set ruler
 
-" Use 'light' themes on colourschemes when available
-set background=light
 
 " Highlight the search results
 set hlsearch
@@ -21,6 +19,9 @@ set hidden
 
 " Clear the jumplist each time you start Vim
 autocmd VimEnter * :clearjumps
+
+" Use 'light' themes on colourschemes when available
+set background=light
 
 " ---------------------------------- Plugins -----------------------------------
 

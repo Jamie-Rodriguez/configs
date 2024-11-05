@@ -8,8 +8,6 @@ vim.opt.relativenumber = true
 -- Display current line and column in the bottom-right
 vim.opt.ruler = true
 
--- Use 'light' themes on colourschemes when available
-vim.opt.background = 'dark'
 
 -- Highlight the search results
 vim.opt.hlsearch = true
@@ -28,6 +26,9 @@ vim.api.nvim_create_autocmd("UIEnter", {
     pattern = "*",
     command = "clearjumps"
 })
+
+-- Use 'light' themes on colourschemes when available
+vim.opt.background = 'dark'
 
 ----------------------------------- Plugins ------------------------------------
 
