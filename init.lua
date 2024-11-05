@@ -41,6 +41,9 @@ Plug 'tpope/vim-fugitive'
 -- Make marks visible in 'sign column'
 Plug 'kshenoy/vim-signature'
 
+-- For fast-switching between buffers
+Plug 'tpope/vim-unimpaired'
+
 -- fzf
 Plug('junegunn/fzf', {
     ['do'] = function()
