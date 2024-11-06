@@ -35,9 +35,6 @@ vim.api.nvim_create_autocmd("UIEnter", {
     command = "clearjumps"
 })
 
--- Use 'light' themes on colourschemes when available
-vim.opt.background = 'dark'
-
 ----------------------------------- Plugins ------------------------------------
 
 local Plug = vim.fn['plug#']
@@ -306,6 +303,9 @@ vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
-
--- Set colorscheme
-vim.cmd('colorscheme everforest')
+--------------------------------- Colourscheme ---------------------------------
+-- Use 'dark' themes on colourschemes when available
+vim.opt.background = 'dark'
+-- Specify 'soft' contrast for Everforest theme
+vim.g.everforest_background = 'soft'
+vim.cmd.colorscheme('everforest')

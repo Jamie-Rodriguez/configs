@@ -28,9 +28,6 @@ set hidden
 " Clear the jumplist each time you start Vim
 autocmd VimEnter * :clearjumps
 
-" Use 'light' themes on colourschemes when available
-set background=light
-
 " ---------------------------------- Plugins -----------------------------------
 
 " NOTE: using vim-plug
@@ -73,9 +70,6 @@ Plug 'mattn/vim-lsp-settings'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
-
-" Set colorscheme now that plugins are loaded
-colorscheme PaperColor
 
 " ------------------------------------ LSP -------------------------------------
 
@@ -187,3 +181,9 @@ function! s:on_lsp_buffer_enabled() abort
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
 endfunction
+
+" ------------------------------- Colourschemes --------------------------------
+" Use 'light' themes on colourschemes when available
+set background=light
+" Set colorscheme now that plugins are loaded
+colorscheme PaperColor
