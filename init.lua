@@ -11,11 +11,17 @@ vim.opt.ruler = true
 -- Disable code-folding
 vim.opt.foldenable = false
 
+-- Enable searching down into sub-folders
+vim.opt.path:append("**")
+
 -- Highlight the search results
 vim.opt.hlsearch = true
 
 -- Incrementally search while typing
 vim.opt.incsearch = true
+
+-- Display all matches when using tab-completion
+vim.opt.wildmenu = true
 
 -- Make autocomplete work like Bash
 vim.opt.wildmode = 'list:longest,list:full'

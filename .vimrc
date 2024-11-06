@@ -10,11 +10,17 @@ set ruler
 " Disable code-folding
 set nofoldenable
 
+" Enable searching down into sub-folders
+set path+=**
+
 " Highlight the search results
 set hlsearch
 
 " Incrementally search while typing
 set incsearch
+
+" Display all matches when using tab-completion
+set wildmenu
 
 " Set so that we don't have to save current buffer before switching to another buffer
 set hidden
