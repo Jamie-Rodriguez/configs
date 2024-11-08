@@ -304,8 +304,15 @@ vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
 --------------------------------- Colourscheme ---------------------------------
+
 -- Use 'dark' themes on colourschemes when available
 vim.opt.background = 'dark'
 -- Specify 'soft' contrast for Everforest theme
 vim.g.everforest_background = 'soft'
 vim.cmd.colorscheme('everforest')
+
+
+-- Highlight trailing spaces
+-- Put this at the bottom as some plugins may override this setting
+vim.cmd [[highlight TrailingSpaces ctermbg=red guibg=red]]
+vim.cmd [[match TrailingSpaces /\s\+$/]]

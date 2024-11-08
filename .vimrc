@@ -187,3 +187,9 @@ endfunction
 set background=light
 " Set colorscheme now that plugins are loaded
 colorscheme PaperColor
+
+
+" Highlight trailing spaces
+" Put this at the bottom as some plugins may override this setting
+highlight TrailingSpaces ctermbg=red guibg=red
+match TrailingSpaces /\s\+$/
