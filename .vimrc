@@ -38,11 +38,14 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 " Git
 Plug 'tpope/vim-fugitive'
 
-" Make marks visible in 'sign column'
-Plug 'kshenoy/vim-signature'
+" Delete/change/add parentheses/quotes/XML-tags/much more with ease
+Plug 'tpope/vim-surround'
 
 " For fast-switching between buffers
 Plug 'tpope/vim-unimpaired'
+
+" Make marks visible in 'sign column'
+Plug 'kshenoy/vim-signature'
 
 " fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
