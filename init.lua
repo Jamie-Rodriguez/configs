@@ -54,11 +54,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'kshenoy/vim-signature'
 
 -- fzf
-Plug('junegunn/fzf', {
-    ['do'] = function()
-        vim.fn['fzf#install']()
-    end
-})
+Plug('nvim-telescope/telescope-fzf-native.nvim', { ['do'] = 'make' })
 Plug 'junegunn/fzf.vim'
 
 -- Treesitter
@@ -318,6 +314,8 @@ require('telescope').setup {
         },
     },
 }
+
+require('telescope').load_extension('fzf')
 
 --------------------------------- Keybindings ----------------------------------
 
