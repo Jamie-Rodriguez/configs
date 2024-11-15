@@ -50,6 +50,9 @@ Plug 'tpope/vim-surround'
 -- For fast-switching between buffers
 Plug 'tpope/vim-unimpaired'
 
+-- Multicursors support
+Plug('mg979/vim-visual-multi', { branch = 'master' })
+
 -- Make marks visible in 'sign column'
 Plug 'kshenoy/vim-signature'
 
