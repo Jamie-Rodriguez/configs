@@ -310,12 +310,6 @@ require('telescope').setup {
         dynamic_preview_title = true,
         wrap_results = true
     },
-    pickers = {
-        live_grep = {
-            theme = 'dropdown',
-            previewer = true,
-        },
-    },
 }
 
 require('telescope').load_extension('fzf')
