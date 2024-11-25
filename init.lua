@@ -74,7 +74,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'preservim/vim-markdown'
 Plug 'vim-python/python-syntax'
-Plug 'elixir-editors/vim-elixir'
 
 -- Colourschemes
 Plug 'NLKNguyen/papercolor-theme'
