@@ -25,10 +25,26 @@ set wildmenu
 " Set so that we don't have to save current buffer before switching to another buffer
 set hidden
 
+" Split windows to the right and below by default
+set splitright
+set splitbelow
+
+" Auto-reload files when changed outside of Vim
+set autoread
+au FocusGained,BufEnter * checktime
+
 " Clear the jumplist each time you start Vim
 autocmd VimEnter * :clearjumps
 
-" ---------------------------------- Plugins -----------------------------------
+" Clear any previous usages of <SPACE>
+nnoremap <SPACE> <Nop>
+" Set leader key to <SPACE>
+let mapleader = " "
+
+
+" ==============================================================================
+" =                                  Plugins                                   =
+" ==============================================================================
 
 " NOTE: using vim-plug
 
@@ -76,7 +92,10 @@ Plug 'mattn/vim-lsp-settings'
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
-" ------------------------------------ LSP -------------------------------------
+
+" ==============================================================================
+" =                                    LSP                                     =
+" ==============================================================================
 
 augroup lsp_install
     au!
@@ -158,15 +177,39 @@ if executable('rust-analyzer')
         \ })
 endif
 
-" -------------------------------- Keybindings ---------------------------------
 
-" fzf
+" ==============================================================================
+" =                                Keybindings                                 =
+" ==============================================================================
+
+" ----------------------------- FuZzy Finder (fzf) -----------------------------
+
+" Search through marks
+nnoremap <leader>m :Marks<CR>
+
+" List open buffers
+nnoremap <leader>b :Buffers<CR>
+
+" Search through all lines of all open buffers
+nnoremap <leader>l :Lines<CR>
+
 " Find file
 nnoremap <C-p> :Files<CR>
-" Search across entire project for string
-nnoremap <leader>f :Rg<space>
 
-" LSP keybindings
+" ---------------------------------- Ripgrep -----------------------------------
+
+" This command produces more advanced Rg with preview
+command! -bang -nargs=* RgPreview
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+" Search across entire project for string
+nnoremap <leader>f :RgPreview<space>
+
+" Search for word under cursor
+nnoremap <leader>* :Rg <C-R><C-W><CR>
+
+" ------------------------------ LSP keybindings -------------------------------
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
@@ -200,18 +243,28 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> <space>o <plug>(lsp-document-symbol-search)
     " Show workspace symbol list
     nmap <buffer> <space>ws <plug>(lsp-workspace-symbol-search)
+    " Open document outline
+    nmap <buffer> <leader>lo <plug>(lsp-document-symbol)
+    " Format current document
+    nmap <buffer> <leader>lf <plug>(lsp-document-format)
 
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
 endfunction
 
-" ------------------------------- Colourschemes --------------------------------
+
+" ==============================================================================
+" =                               Colourschemes                                =
+" ==============================================================================
 " Use 'light' themes on colourschemes when available
 set background=light
 " Set colorscheme now that plugins are loaded
 colorscheme PaperColor
 
 
+" ==============================================================================
+" =                                   Other                                    =
+" ==============================================================================
 " Highlight trailing spaces
 " Put this at the bottom as some plugins may override this setting
 highlight TrailingSpaces ctermbg=red guibg=red
