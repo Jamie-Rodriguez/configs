@@ -240,11 +240,11 @@ function! s:on_lsp_buffer_enabled() abort
     " Go to previous diagnostic
     nmap <buffer> [d <plug>(lsp-previous-diagnostic)
     " Show document symbol list
-    nmap <buffer> <space>o <plug>(lsp-document-symbol-search)
+    nmap <buffer> <leader>ds <plug>(lsp-document-symbol-search)
     " Show workspace symbol list
-    nmap <buffer> <space>ws <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> <leader>ws <plug>(lsp-workspace-symbol-search)
     " Open document outline
-    nmap <buffer> <leader>lo <plug>(lsp-document-symbol)
+    nmap <buffer> <leader>do <plug>(lsp-document-symbol)
     " Format current document
     nmap <buffer> <leader>lf <plug>(lsp-document-format)
 

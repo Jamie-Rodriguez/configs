@@ -29,11 +29,28 @@ vim.opt.wildmode = 'list:longest,list:full'
 -- Set so that we don't have to save current buffer before switching to another buffer
 vim.opt.hidden = true
 
+-- Split windows to the right and below by default
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+
+-- Auto-reload files when changed outside of NeoVim
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd({"FocusGained", "BufEnter"}, {
+    pattern = "*",
+    command = "checktime"
+})
+
 -- Clear the jumplist each time you start NeoVim
 vim.api.nvim_create_autocmd("UIEnter", {
     pattern = "*",
     command = "clearjumps"
 })
+
+-- Clear any previous usages of <SPACE>
+vim.keymap.set('n', '<SPACE>', '<Nop>', { noremap = true })
+-- Set leader key to <SPACE>
+vim.g.mapleader = " "
+
 
 ----------------------------------- Plugins ------------------------------------
 
@@ -150,6 +167,7 @@ local on_attach = function(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
+
     local opts = { noremap = true, silent = true, buffer = bufnr }
 
     -- Go to definition of symbol under cursor
@@ -189,10 +207,22 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 
     -- Show document symbol list
-    vim.keymap.set('n', '<space>o', vim.lsp.buf.document_symbol, opts)
-
+    vim.keymap.set('n', '<leader>ds', function()
+	    require('telescope.builtin').lsp_document_symbols()
+    end, opts)
+    
     -- Show workspace symbol list
-    vim.keymap.set('n', '<space>ws', vim.lsp.buf.workspace_symbol, opts)
+    vim.keymap.set('n', '<leader>ws', function()
+	    require('telescope.builtin').lsp_workspace_symbols()
+    end, opts)
+
+    -- Open document outline
+    vim.keymap.set('n', '<leader>do', vim.lsp.buf.document_symbol, opts)
+
+    -- Format current document
+    vim.keymap.set('n', '<leader>lf', function()
+	    vim.lsp.buf.format { async = true }
+    end, opts)
 end
 
 -- clangd
@@ -296,6 +326,7 @@ nvim_lsp.rust_analyzer.setup({
     }
 })
 
+
 ---------------------------- Plugins Custom Configs ----------------------------
 
 require('telescope').setup {
@@ -313,14 +344,23 @@ require('telescope').setup {
 
 require('telescope').load_extension('fzf')
 
+
 --------------------------------- Keybindings ----------------------------------
 
 -- Telescope
 local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+-- Search through marks
+vim.keymap.set('n', '<leader>m', builtin.marks, {})
+-- List open buffers
+vim.keymap.set('n', '<leader>b', builtin.buffers, {})
+-- Search across entire project for string
+vim.keymap.set('n', '<leader>f', builtin.live_grep, {})
+-- Find file
+vim.keymap.set('n', '<C-p>',     builtin.find_files, {})
+-- Search for word under cursor
+vim.keymap.set('n', '<leader>*', function()
+    builtin.grep_string({ search = vim.fn.expand("<cword>") })
+end, {})
 
 --------------------------------- Colourscheme ---------------------------------
 
@@ -331,6 +371,7 @@ vim.g.everforest_background = 'soft'
 vim.cmd.colorscheme('everforest')
 
 
+------------------------------------ Other -------------------------------------
 -- Highlight trailing spaces
 -- Put this at the bottom as some plugins may override this setting
 vim.cmd [[highlight TrailingSpaces ctermbg=red guibg=red]]
