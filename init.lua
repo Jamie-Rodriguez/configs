@@ -41,7 +41,7 @@ vim.api.nvim_create_autocmd({"FocusGained", "BufEnter"}, {
 })
 
 -- Clear the jumplist each time you start NeoVim
-vim.api.nvim_create_autocmd("UIEnter", {
+vim.api.nvim_create_autocmd("VimEnter", {
     pattern = "*",
     command = "clearjumps"
 })
@@ -167,14 +167,55 @@ local on_attach = function(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
+    -- Enable semantic tokens if the server supports it (similar to vim-lsp semantic highlighting)
+    if client.server_capabilities.semanticTokensProvider then
+        vim.lsp.semantic_tokens.start(bufnr, client.id)
+    end
+
+    -- Enable code lens if supported
+    if client.server_capabilities.codeLensProvider then
+        vim.lsp.codelens.refresh()
+        -- Auto refresh code lens
+        vim.api.nvim_create_autocmd({"BufEnter", "CursorHold", "InsertLeave"}, {
+            buffer = bufnr,
+            callback = vim.lsp.codelens.refresh,
+        })
+    end
 
     local opts = { noremap = true, silent = true, buffer = bufnr }
 
     -- Go to definition of symbol under cursor
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
 
+    -- Go to declaration of symbol under cursor
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+
+    -- Go to type definition of symbol under cursor
+    vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, opts)
+
     -- Go to implementation of symbol under cursor
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+
+    -- Peek definition without jumping (using Telescope)
+    vim.keymap.set('n', '<leader>pd', function()
+        require('telescope.builtin').lsp_definitions({ jump_type = "never" })
+    end, opts)
+
+    -- Peek declaration without jumping
+    vim.keymap.set('n', '<leader>pD', function()
+        -- NeoVim doesn't have built-in peek for declaration, use Telescope
+        require('telescope.builtin').lsp_declarations({ jump_type = "never" })
+    end, opts)
+
+    -- Peek type definition without jumping
+    vim.keymap.set('n', '<leader>py', function()
+        require('telescope.builtin').lsp_type_definitions({ jump_type = "never" })
+    end, opts)
+
+    -- Peek implementation without jumping
+    vim.keymap.set('n', '<leader>pi', function()
+        require('telescope.builtin').lsp_implementations({ jump_type = "never" })
+    end, opts)
 
     -- Find references of symbol under cursor
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
@@ -208,12 +249,12 @@ local on_attach = function(client, bufnr)
 
     -- Show document symbol list
     vim.keymap.set('n', '<leader>ds', function()
-	    require('telescope.builtin').lsp_document_symbols()
+        require('telescope.builtin').lsp_document_symbols()
     end, opts)
-    
+
     -- Show workspace symbol list
     vim.keymap.set('n', '<leader>ws', function()
-	    require('telescope.builtin').lsp_workspace_symbols()
+        require('telescope.builtin').lsp_workspace_symbols()
     end, opts)
 
     -- Open document outline
@@ -221,11 +262,13 @@ local on_attach = function(client, bufnr)
 
     -- Format current document
     vim.keymap.set('n', '<leader>lf', function()
-	    vim.lsp.buf.format { async = true }
+        vim.lsp.buf.format { async = true }
     end, opts)
+
+    -- Run code lens action
+    vim.keymap.set('n', '<leader>cl', vim.lsp.codelens.run, opts)
 end
 
--- clangd
 -- WARNING: If you want to use clangd as the LSP server in your project, you
 -- NEED to set up a JSON Compilation Database (compile_commands.json)
 nvim_lsp.clangd.setup {
@@ -244,7 +287,6 @@ nvim_lsp.clangd.setup {
     )
 }
 
--- tsserver
 nvim_lsp.tsserver.setup {
     on_attach = on_attach,
     capabilities = capabilities,
@@ -264,12 +306,12 @@ nvim_lsp.tsserver.setup {
     )
 }
 
--- clojure-lsp
 nvim_lsp.clojure_lsp.setup {
     on_attach = on_attach,
     capabilities = capabilities,
     filetypes = { "clojure", "clojurescript", "edn" },
     root_dir = nvim_lsp.util.root_pattern(
+        ".clj-kondo",
         "project.clj",
         "deps.edn",
         "build.boot",
@@ -278,7 +320,6 @@ nvim_lsp.clojure_lsp.setup {
     )
 }
 
--- python-lsp-server
 nvim_lsp.pylsp.setup {
     on_attach = on_attach,
     capabilities = capabilities,
@@ -306,6 +347,7 @@ nvim_lsp.pylsp.setup {
 
 nvim_lsp.rust_analyzer.setup({
     on_attach = on_attach,
+    capabilities = capabilities,
     settings = {
         ["rust-analyzer"] = {
             imports = {
@@ -349,14 +391,27 @@ require('telescope').load_extension('fzf')
 
 -- Telescope
 local builtin = require('telescope.builtin')
+
 -- Search through marks
 vim.keymap.set('n', '<leader>m', builtin.marks, {})
+
 -- List open buffers
 vim.keymap.set('n', '<leader>b', builtin.buffers, {})
--- Search across entire project for string
-vim.keymap.set('n', '<leader>f', builtin.live_grep, {})
+
+-- Search through all lines of all open buffers
+vim.keymap.set('n', '<leader>l', function()
+    builtin.live_grep({
+        grep_open_files = true,
+        prompt_title = 'Live Grep in Open Buffers',
+    })
+end, {})
+
 -- Find file
-vim.keymap.set('n', '<C-p>',     builtin.find_files, {})
+vim.keymap.set('n', '<C-p>', builtin.find_files, {})
+
+-- Search across entire project for string (Ripgrep)
+vim.keymap.set('n', '<leader>f', builtin.live_grep, {})
+
 -- Search for word under cursor
 vim.keymap.set('n', '<leader>*', function()
     builtin.grep_string({ search = vim.fn.expand("<cword>") })

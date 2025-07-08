@@ -102,9 +102,25 @@ augroup lsp_install
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
+" Highlight references under cursor automatically
+let g:lsp_document_highlight_enabled = 1
+
+" Show diagnostics in virtual text
+let g:lsp_diagnostics_virtual_text_enabled = 1
+let g:lsp_diagnostics_virtual_text_align = 'after'
+
+" Enable code lens
+let g:lsp_code_lens_enabled = 1
+
+" Enable completion documentation preview
+let g:lsp_documentation_float = 1
+
+" Semantic highlighting
+let g:lsp_semantic_enabled = 1
+
 if executable('typescript-language-server')
     au User lsp_setup call lsp#register_server({
-        \ 'name': 'tsserver',
+        \ 'name': 'typescript-language-server',
         \ 'cmd': {server_info->['typescript-language-server', '--stdio']},
         \ 'root_uri':{server_info->lsp#utils#path_to_uri(
         \     lsp#utils#find_nearest_parent_file_directory(
@@ -128,7 +144,7 @@ if executable('clojure-lsp')
         \ 'cmd': {server_info->['clojure-lsp']},
         \ 'allowlist': ['clojure', 'clojurescript'],
         \ 'root_uri': {server_info->lsp#utils#path_to_uri(
-        \     lsp#utils#find_nearest_parent_directory(
+        \     lsp#utils#find_nearest_parent_file_directory(
         \         lsp#utils#get_buffer_path(),
         \         ['.clj-kondo',
         \          'project.clj',
@@ -176,7 +192,6 @@ if executable('rust-analyzer')
         \ })
 endif
 
-
 " ==============================================================================
 " =                                Keybindings                                 =
 " ==============================================================================
@@ -216,8 +231,20 @@ function! s:on_lsp_buffer_enabled() abort
 
     " Go to definition of symbol under cursor
     nmap <buffer> gd <plug>(lsp-definition)
+    " Go to declaration of symbol under cursor
+    nmap <buffer> gD <plug>(lsp-declaration)
+    " Go to type definition of symbol under cursor
+    nmap <buffer> gy <plug>(lsp-type-definition)
     " Go to implementation of symbol under cursor
     nmap <buffer> gi <plug>(lsp-implementation)
+    " Peek definition without jumping
+    nmap <buffer> <leader>pd <plug>(lsp-peek-definition)
+    " Peek declaration without jumping
+    nmap <buffer> <leader>pD <plug>(lsp-peek-declaration)
+    " Peek type definition without jumping
+    nmap <buffer> <leader>py <plug>(lsp-peek-type-definition)
+    " Peek implementation without jumping
+    nmap <buffer> <leader>pi <plug>(lsp-peek-implementation)
     " Find references of symbol under cursor
     nmap <buffer> gr <plug>(lsp-references)
     " Show the places where the current function is being called
@@ -246,6 +273,8 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> <leader>do <plug>(lsp-document-symbol)
     " Format current document
     nmap <buffer> <leader>lf <plug>(lsp-document-format)
+    " Run code lens action
+    nmap <buffer> <leader>cl <plug>(lsp-code-lens)
 
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
