@@ -118,23 +118,21 @@ let g:lsp_documentation_float = 1
 " Semantic highlighting
 let g:lsp_semantic_enabled = 1
 
-if executable('typescript-language-server')
+if executable('clangd')
     au User lsp_setup call lsp#register_server({
-        \ 'name': 'typescript-language-server',
-        \ 'cmd': {server_info->['typescript-language-server', '--stdio']},
-        \ 'root_uri':{server_info->lsp#utils#path_to_uri(
+        \ 'name': 'clangd',
+        \ 'cmd': {server_info->['clangd']},
+        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+        \ 'root_uri': {server_info->lsp#utils#path_to_uri(
         \     lsp#utils#find_nearest_parent_file_directory(
         \         lsp#utils#get_buffer_path(),
-        \         ['package.json',
-        \          'tsconfig.json',
-        \          'jsconfig.json',
-        \          '.git']))},
-        \ 'whitelist': ['javascript',
-        \               'javascriptreact',
-        \               'javascript.jsx',
-        \               'typescript',
-        \               'typescriptreact',
-        \               'typescript.tsx'],
+        \         ['.clangd',
+        \          '.clang-tidy',
+        \          '.clang-format',
+        \          'compile_commands.json',
+        \          'compile_flags.txt',
+        \          '.git']
+        \     ))},
         \ })
 endif
 
@@ -189,6 +187,26 @@ if executable('rust-analyzer')
         \       'enable': v:true,
         \     },
         \   },
+        \ })
+endif
+
+if executable('typescript-language-server')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'typescript-language-server',
+        \ 'cmd': {server_info->['typescript-language-server', '--stdio']},
+        \ 'root_uri':{server_info->lsp#utils#path_to_uri(
+        \     lsp#utils#find_nearest_parent_file_directory(
+        \         lsp#utils#get_buffer_path(),
+        \         ['package.json',
+        \          'tsconfig.json',
+        \          'jsconfig.json',
+        \          '.git']))},
+        \ 'whitelist': ['javascript',
+        \               'javascriptreact',
+        \               'javascript.jsx',
+        \               'typescript',
+        \               'typescriptreact',
+        \               'typescript.tsx'],
         \ })
 endif
 

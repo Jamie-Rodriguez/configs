@@ -282,26 +282,6 @@ nvim_lsp.clangd.setup {
         '.clang-format',
         'compile_commands.json',
         'compile_flags.txt',
-        'configure.ac',
-        '.git'
-    )
-}
-
-nvim_lsp.tsserver.setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    filetypes = {
-        'javascript',
-        'javascriptreact',
-        'javascript.jsx',
-        'typescript',
-        'typescriptreact',
-        'typescript.tsx'
-    },
-    root_dir = nvim_lsp.util.root_pattern(
-        'package.json',
-        'tsconfig.json',
-        'jsconfig.json',
         '.git'
     )
 }
@@ -367,6 +347,25 @@ nvim_lsp.rust_analyzer.setup({
         }
     }
 })
+
+nvim_lsp.tsserver.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = {
+        'javascript',
+        'javascriptreact',
+        'javascript.jsx',
+        'typescript',
+        'typescriptreact',
+        'typescript.tsx'
+    },
+    root_dir = nvim_lsp.util.root_pattern(
+        'package.json',
+        'tsconfig.json',
+        'jsconfig.json',
+        '.git'
+    )
+}
 
 
 ---------------------------- Plugins Custom Configs ----------------------------
