@@ -87,7 +87,6 @@ Plug 'sainnhe/sonokai'
 
 " LSP
 Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
