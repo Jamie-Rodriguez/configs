@@ -1,3 +1,6 @@
+" Use new regular expression engine
+set re=0
+
 " Syntax highlighting
 syntax on
 
@@ -216,6 +219,24 @@ endif
 
 " ----------------------------- FuZzy Finder (fzf) -----------------------------
 
+let g:fzf_vim = {}
+
+let g:fzf_layout = { 'window': { 'width': 1.0, 'height': 0.9, 'border': 'horizontal' } }
+
+" Display preview on the right if there are > 70 columns,
+" else stack it above the list
+" `Ctrl /` toggles this setting
+let g:fzf_vim.preview_window = [ 'right,50%,wrap,<70(up,50%,border-bottom)', 'ctrl-/' ]
+
+" Cut long paths from the left so that the filenames stay intact
+let g:fzf_vim.files_options = ['--keep-right']
+let g:fzf_vim.buffers_options = ['--keep-right']
+
+" Search results: 'path:line:col:' on one line, the code on the next,
+" and wrap anything too long rather than cutting it off
+let g:fzf_vim.grep_multi_line = 1
+let g:fzf_vim.rg_options = ['--wrap']
+
 " Search through marks
 nnoremap <leader>m :Marks<CR>
 
@@ -230,16 +251,24 @@ nnoremap <C-p> :Files<CR>
 
 " ---------------------------------- Ripgrep -----------------------------------
 
-" This command produces more advanced Rg with preview
-command! -bang -nargs=* RgPreview
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview(), <bang>0)
-" Search across entire project for string
-nnoremap <leader>f :RgPreview<space>
+let g:rg_command = 'rg --column --line-number --no-heading --color=always --smart-case'
+  \ . ' --trim --max-columns=150 --max-columns-preview -- '
 
-" Search for word under cursor
-nnoremap <leader>* :Rg <C-R><C-W><CR>
+" :Rg {pattern}    Search once, then fuzzy-filter the results
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(g:rg_command . fzf#shellescape(<q-args>),
+  \   fzf#vim#with_preview(), <bang>0)
+
+" :RG    Live search that re-runs as you type. CTRL-F switches to
+"        fuzzy-filtering the current results
+command! -bang -nargs=* RG
+  \ call fzf#vim#grep2(g:rg_command, <q-args>, fzf#vim#with_preview({ 'options': [
+  \   '--bind', 'ctrl-f:unbind(change,ctrl-f)+change-prompt(Filter> )+enable-search+clear-query'
+  \ ]}), <bang>0)
+
+nnoremap <leader>f :RG<CR>
+" Whole-word search for the word under the cursor, like *
+nnoremap <leader>* :Rg \b<C-R><C-W>\b<CR>
 
 " ------------------------------ LSP keybindings -------------------------------
 function! s:on_lsp_buffer_enabled() abort
