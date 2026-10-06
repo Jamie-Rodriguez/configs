@@ -1,4 +1,10 @@
-" Use new regular expression engine
+" Load Vim's own defaults first (a ~/.vimrc stops Vim loading them by itself):
+" sensible backspace, no lag after <Esc>, scrolloff, showcmd, reopening a file
+" at the last cursor position, etc. Anything below can override them.
+unlet! skip_defaults_vim
+source $VIMRUNTIME/defaults.vim
+
+" Regex engine: automatic selection
 set re=0
 
 " Syntax highlighting
@@ -22,6 +28,10 @@ set hlsearch
 " Incrementally search while typing
 set incsearch
 
+" Case-insensitive search, unless the pattern contains a capital letter
+" (matches ripgrep's --smart-case)
+set ignorecase smartcase
+
 " Display all matches when using tab-completion
 set wildmenu
 
@@ -33,8 +43,12 @@ set splitright
 set splitbelow
 
 " Auto-reload files when changed outside of Vim
+" the augroup stops it being added twice when this file is re-sourced)
 set autoread
-au FocusGained,BufEnter * checktime
+augroup auto_reload
+    autocmd!
+    autocmd FocusGained,BufEnter * if getcmdwintype() ==# '' | checktime | endif
+augroup END
 
 " Clear the jumplist each time you start Vim
 autocmd VimEnter * :clearjumps
@@ -74,7 +88,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 " Syntax support
-Plug 'kien/rainbow_parentheses.vim'
+Plug 'luochen1990/rainbow'
 Plug 'NLKNguyen/c-syntax.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'MaxMEllon/vim-jsx-pretty'
@@ -94,6 +108,21 @@ Plug 'prabirshrestha/vim-lsp'
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
+" ------------------------------ Plugin settings -------------------------------
+
+" Rainbow parentheses: turn on everywhere
+let g:rainbow_active = 1
+" Its default colours for 256-colour terminals are pale and hard to read on a
+" light background, so use darker ones (with 'termguicolors' on, its own darker
+" GUI colours are used instead)
+let g:rainbow_conf = {
+    \ 'ctermfgs': [26, 166, 29, 124, 92],
+    \ }
+
+" Turn on all of python-syntax's extra highlighting (built-in functions and
+" types, string formatting, etc.), which is off by default (why??)
+let g:python_highlight_all = 1
+
 
 " ==============================================================================
 " =                                    LSP                                     =
@@ -105,18 +134,17 @@ augroup lsp_install
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
+" Use Vim's built-in LSP channel support, which is faster than vim-lsp's own
+if has('patch-8.2.4780')
+    let g:lsp_use_native_client = 1
+endif
+
 " Highlight references under cursor automatically
 let g:lsp_document_highlight_enabled = 1
 
 " Show diagnostics in virtual text
 let g:lsp_diagnostics_virtual_text_enabled = 1
 let g:lsp_diagnostics_virtual_text_align = 'after'
-
-" Enable code lens
-let g:lsp_code_lens_enabled = 1
-
-" Enable completion documentation preview
-let g:lsp_documentation_float = 1
 
 " Semantic highlighting
 let g:lsp_semantic_enabled = 1
@@ -125,7 +153,7 @@ if executable('clangd')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'clangd',
         \ 'cmd': {server_info->['clangd']},
-        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+        \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
         \ 'root_uri': {server_info->lsp#utils#path_to_uri(
         \     lsp#utils#find_nearest_parent_file_directory(
         \         lsp#utils#get_buffer_path(),
@@ -179,7 +207,7 @@ if executable('rust-analyzer')
     au User lsp_setup call lsp#register_server({
         \   'name': 'Rust Language Server',
         \   'cmd': {server_info->['rust-analyzer']},
-        \   'whitelist': ['rust'],
+        \   'allowlist': ['rust'],
         \   'initialization_options': {
         \     'cargo': {
         \       'buildScripts': {
@@ -204,7 +232,7 @@ if executable('typescript-language-server')
         \          'tsconfig.json',
         \          'jsconfig.json',
         \          '.git']))},
-        \ 'whitelist': ['javascript',
+        \ 'allowlist': ['javascript',
         \               'javascriptreact',
         \               'javascript.jsx',
         \               'typescript',
@@ -283,7 +311,7 @@ function! s:on_lsp_buffer_enabled() abort
     " Go to type definition of symbol under cursor
     nmap <buffer> gy <plug>(lsp-type-definition)
     " Go to implementation of symbol under cursor
-    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> <leader>gi <plug>(lsp-implementation)
     " Peek definition without jumping
     nmap <buffer> <leader>pd <plug>(lsp-peek-definition)
     " Peek declaration without jumping
@@ -293,7 +321,7 @@ function! s:on_lsp_buffer_enabled() abort
     " Peek implementation without jumping
     nmap <buffer> <leader>pi <plug>(lsp-peek-implementation)
     " Find references of symbol under cursor
-    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> <leader>gr <plug>(lsp-references)
     " Show the places where the current function is being called
     nmap <buffer> <leader>ci <plug>(lsp-call-hierarchy-incoming)
     " Show functions that are called within the body of the current function
@@ -306,8 +334,9 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> <leader>rn <plug>(lsp-rename)
     " Show available code actions
     nmap <buffer> <leader>ca <plug>(lsp-code-action)
-    " Show diagnostic (error, warning, etc.) in a floating window
-    nmap <buffer> <space>e <plug>(lsp-diagnostic-open-float)
+    " List the file's diagnostics (errors, warnings, etc.) in the location list
+    " (the diagnostic for each line is also shown inline as virtual text)
+    nmap <buffer> <leader>e <plug>(lsp-document-diagnostics)
     " Go to next diagnostic
     nmap <buffer> ]d <plug>(lsp-next-diagnostic)
     " Go to previous diagnostic
@@ -319,28 +348,55 @@ function! s:on_lsp_buffer_enabled() abort
     " Open document outline
     nmap <buffer> <leader>do <plug>(lsp-document-symbol)
     " Format current document
-    nmap <buffer> <leader>lf <plug>(lsp-document-format)
+    nmap <buffer> <leader>cf <plug>(lsp-document-format)
     " Run code lens action
     nmap <buffer> <leader>cl <plug>(lsp-code-lens)
 
     let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+    autocmd! BufWritePre *.rs call execute('LspDocumentFormatSync')
 endfunction
-
-
-" ==============================================================================
-" =                               Colourschemes                                =
-" ==============================================================================
-" Use 'light' themes on colourschemes when available
-set background=light
-" Set colorscheme now that plugins are loaded
-colorscheme PaperColor
 
 
 " ==============================================================================
 " =                                   Other                                    =
 " ==============================================================================
-" Highlight trailing spaces
-" Put this at the bottom as some plugins may override this setting
+" Highlight trailing spaces in red
+" NOTE: must come before `colorscheme` below, so the ColorScheme autocmd
+" creates the highlight group when the colourscheme loads
+
+function! s:MatchTrailingSpaces(in_insert_mode) abort
+    if &buftype !=# ''
+        match none
+    elseif a:in_insert_mode
+        " Don't flag the space just typed at the cursor
+        match TrailingSpaces /\s\+\%#\@<!$/
+    else
+        match TrailingSpaces /\s\+$/
+    endif
+endfunction
+
+augroup trailing_spaces
+    autocmd!
+    " :colorscheme clears custom highlight groups, so re-create it every time
+    autocmd ColorScheme * highlight TrailingSpaces ctermbg=red guibg=red
+    autocmd BufWinEnter,WinEnter,InsertLeave * call s:MatchTrailingSpaces(0)
+    autocmd InsertEnter * call s:MatchTrailingSpaces(1)
+augroup END
+
+" Also define it now, in case no colourscheme gets loaded
 highlight TrailingSpaces ctermbg=red guibg=red
-match TrailingSpaces /\s\+$/
+
+
+" ==============================================================================
+" =                               Colourschemes                                =
+" ==============================================================================
+" Use 24-bit 'true' colour when the terminal supports it
+" ($COLORTERM is the standard way terminals advertise this)
+if has('termguicolors') && ($COLORTERM ==# 'truecolor' || $COLORTERM ==# '24bit')
+    set termguicolors
+endif
+
+" Use 'light' themes on colourschemes when available
+set background=light
+" Set colorscheme now that plugins are loaded
+colorscheme PaperColor
